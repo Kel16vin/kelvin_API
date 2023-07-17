@@ -90,62 +90,64 @@ exports.find_by_id = (request, response) => {
 
 };
 
-//deleting data
-exports.delete = (request,response) => {
-    const id = request.query.id_;
-    
-    Student.findByPk(id)
-     .then(data => {
-         response.send(data);
-     })
-     .catch(err => {
- 
-         //send error response 
-         response.status(400).send({
-             message: err.message || "Error  occurred while retrieving Student"
-         });
- 
-     });
-     Student.destroy({ where: { id: id } })
-    .then(() => {
-      response.send({
-        status: 'Success',
-        message:'Student deleted successfully',
-        status_code: 200
-        
+    // Update a Student by ID
+exports.update_student = (request,response) => {
+    const id = request.params.id;
+    Student.update(request.body, {
+        where: {id:id}
+    }).then(num => {
+        console.log("RETURN" , num);
+        if(num > 0){
+            response.send({
+                status: 100,
+                status_message: "Success",
+                message:`Student with id = ${id} updated successfully`
+
+            });
+    }else{
+        response.send({
+            status: 400,
+            status_message: "Error",
+            message:`Student with id = ${id} not found`
+
+
+        });
+    }
+    }).catch(err => {
+        response.status(500).send({
+            status_message: "Error",
+            message: `Error updating Student with id = ${id}. Error message `
+        });
     });
-    })
-    .catch(err => {
-      response.status(400).send('Error occurred while deleting student');
-    });
-   
 };
 
+//Delete student by id
+exports.delete_student = (request,response) => {
+    const id = request.params.id;
+    Student.destroy({
+        where: {id:id}
+    }).then(num => {
+        console.log("RETURN" , num);
+        if(num > 0){
+            response.send({
+                status: 100,
+                status_message: "Success",
+                message:`Student with id = ${id} deleted successfully`
 
- /*   exports.update = (request, response) => {
+            });
+    }else{
+        response.send({
+            status: 400,
+            status_message: "Error",
+            message:`Student with id = ${id} not found`
 
-        Student.findByPk(studentId)
-  .then((student) => {
-    if (student) {
-      // Update the student's name, age, and grade
-      student.first_name = 'New Name';
-      student.last_name = '';
-      student.gender = '12th Grade';
-      student.class = '';
-      student.physical_address = '';
-      student.status = '';
 
-      // Save the changes to the database
-      return student.save();
+        });
     }
-    throw new Error('Student not found');
-  })
-  .then((updatedStudent) => {
-    console.log('Student updated:', updatedStudent.toJSON());
-  })
-  .catch((error) => {
-    console.error('Error updating student:', error);
-  });
-
-
-    };*/
+    }).catch(err => {
+        response.status(500).send({
+            
+            message: `Error deleting Student with id = ${id}. Error message `
+        });
+    });
+};
