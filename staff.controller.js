@@ -85,4 +85,66 @@ exports.find_by_id = (request, response) => {
    
   
   }; 
+// Update a Staff by ID
+exports.update_staff = (request,response) => {
+    const id = request.params.id;
+    Staff.update(request.body, {
+        where: {id:id}
+    }).then(num => {
+        console.log("RETURN" , num);
+        if(num > 0){
+            response.send({
+                status: 100,
+                status_message: "Success",
+                message:`Staff with id = ${id} updated successfully`
+
+            });
+    }else{
+        response.send({
+            status: 400,
+            status_message: "Error",
+            message:`Staff with id = ${id} not found`
+
+
+        });
+    }
+    }).catch(err => {
+        response.status(500).send({
+            status_message: "Error",
+            message: `Error updating Staff with id = ${id}. Error message `
+        });
+    });
+};
+
+//Delete staff by id
+exports.delete_staff = (request,response) => {
+    const id = request.params.id;
+    Staff.destroy({
+        where: {id:id}
+    }).then(num => {
+        console.log("RETURN" , num);
+        if(num > 0){
+            response.send({
+                status: 100,
+                status_message: "Success",
+                message:`Staff with id = ${id} deleted successfully`
+
+            });
+    }else{
+        response.send({
+            status: 400,
+            status_message: "Error",
+            message:`Staff with id = ${id} not found`
+
+
+        });
+    }
+    }).catch(err => {
+        response.status(500).send({
+            
+            message: `Error deleting Staff with id = ${id}. Error message `
+        });
+    });
+}; 
+ 
  
