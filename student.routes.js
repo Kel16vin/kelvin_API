@@ -22,11 +22,11 @@ module.exports = app => {
 
 //delete students by id route
 //http://localhost:8082/students/delete
-    router.post("/delete",students_logic.delete);
+    router.delete("/delete",students_logic.delete_student);
 
 //updating students route
 //http://localhost:8082/students/update
-    //router.put("/update",students_logic.update);    
+    router.put("/update/:id",students_logic.update_student);    
 
 // define default route
     app.use('/students', router);
