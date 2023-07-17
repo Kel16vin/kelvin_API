@@ -20,6 +20,15 @@ module.exports = app => {
     router.get("/id",staff_logic.find_by_id);
 
 
+//delete staff by id route
+//http://localhost:8082/staff/delete
+    router.delete("/delete/:id",staff_logic.delete_staff);
+
+//updating staff route
+//http://localhost:8082/staff/update/:id
+    router.put("/update/:id",staff_logic.update_staff);    
+
+
 // define default route
     app.use('/staff', router);
 }
